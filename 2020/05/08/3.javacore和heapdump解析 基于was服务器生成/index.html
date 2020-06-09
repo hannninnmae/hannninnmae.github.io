@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/10.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/11.png">
 <meta property="article:published_time" content="2020-05-08T11:42:51.000Z">
-<meta property="article:modified_time" content="2020-06-05T03:29:14.856Z">
+<meta property="article:modified_time" content="2020-06-09T07:06:30.173Z">
 <meta property="article:author" content="Gong Linjie">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="jvm">
@@ -191,7 +191,7 @@
 <h5 id="5-点击线程，查看方法调用链，找到问题，修改代码"><a href="#5-点击线程，查看方法调用链，找到问题，修改代码" class="headerlink" title="5.点击线程，查看方法调用链，找到问题，修改代码"></a>5.点击线程，查看方法调用链，找到问题，修改代码</h5><img src="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/5.png" class="">
 <h5 id="6-对应目录下cmd窗口运行以下命令"><a href="#6-对应目录下cmd窗口运行以下命令" class="headerlink" title="6.对应目录下cmd窗口运行以下命令"></a>6.对应目录下cmd窗口运行以下命令</h5><p><code>java -Xmx500M -jar haxxx.jar heapdump文件名</code></p>
 <img src="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/6.png" class="">
-<h5 id="7-查看heapdump主界面信息，分析是否可能存在内存泄漏的情况"><a href="#7-查看heapdump主界面信息，分析是否可能存在内存泄漏的情况" class="headerlink" title="7.查看heapdump主界面信息，分析是否可能存在内存泄漏的情况"></a>7.查看heapdump主界面信息，分析是否可能存在内存泄漏的情况</h5><p>可以看到当时堆中具体哪个对象数量最多<img src="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/7.png" class="">效果类似于jmap -histo:live pid| head -20(查看目前堆中存活的对象，按对象实例多少取前20位)，助于分析是否存在内存泄漏</p>
+<h5 id="7-查看heapdump主界面信息，分析是否可能存在内存泄漏的情况"><a href="#7-查看heapdump主界面信息，分析是否可能存在内存泄漏的情况" class="headerlink" title="7.查看heapdump主界面信息，分析是否可能存在内存泄漏的情况"></a>7.查看heapdump主界面信息，分析是否可能存在内存泄漏的情况</h5><p>可以看到当时堆中具体哪个对象数量最多<img src="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/7.png" class="">效果类似于jmap -histo pid| head -20（按对象实例多少取前20位），助于分析是否存在内存泄漏（jmap -histo:live pid，可以主动触发full gc）</p>
 <h5 id="PS-如果was服务器性能不好，或者偶尔会WebContainer告警，可以先尝试以下参数修改"><a href="#PS-如果was服务器性能不好，或者偶尔会WebContainer告警，可以先尝试以下参数修改" class="headerlink" title="PS:如果was服务器性能不好，或者偶尔会WebContainer告警，可以先尝试以下参数修改"></a>PS:如果was服务器性能不好，或者偶尔会WebContainer告警，可以先尝试以下参数修改</h5><ul>
 <li><font color=red>中间件服务器&gt;server1&gt;线程池</font>下的ORB.thread.pool和WebContainer参数</li>
 <li><font color=red>中间件服务器&gt;server1&gt;进程定义&gt;Java 虚拟机</font>下的堆大小和相应jvm参数，建议初始堆大小和最大堆大小设置成一样，gc之后减少cpu对于内存抖动的消耗</li>
