@@ -165,7 +165,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本篇记录字节码增加的两种方式，ASM和Javassist</p>
-<h3 id="1-ASM"><a href="#1-ASM" class="headerlink" title="1.ASM"></a>1.ASM</h3><p>spring中<font color=red>cglib动态代理</font>就是基于asm来进行动态增强的，<code>org.springframework.cglib.core.DefaultGeneratorStrategy</code>中可以看到asm的影子。本篇demo用asm来实现<font color=red>替换成员变量</font>。</p>
+<h3 id="1-ASM"><a href="#1-ASM" class="headerlink" title="1.ASM"></a>1.ASM</h3><p>spring中<font color=red>cglib动态代理</font>就是基于asm来进行动态增强的，<code>org.springframework.cglib.core.DefaultGeneratorStrategy</code>中就可以看到asm。本篇demo用asm来实现<font color=red>替换成员变量</font>。</p>
 <h5 id="1-1-引入asm相关jar包"><a href="#1-1-引入asm相关jar包" class="headerlink" title="1.1.引入asm相关jar包"></a>1.1.引入asm相关jar包</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.ow2.asm<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>asm<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
         
       
