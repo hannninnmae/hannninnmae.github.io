@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>glj&#39;s bolg</title>
+  <title>系统稳定性 | glj&#39;s bolg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="glj&#39;s bolg">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="最近负责系统稳定性相关的工作，针对重io的系统根据自己的理解整理出这份文档，简单罗列一下系统稳定性方面可以完善的点。 主观思维 “28原则”，20%的代码影响了80%的性能问题，抓住重点 思考问题，放大基数 当系统用户量100，系统正常，放大100倍，100w倍呢… 表数据100，sql流畅，放大100倍，100w倍呢…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系统稳定性">
+<meta property="og:url" content="http://yoursite.com/2020/08/30/5.%E7%B3%BB%E7%BB%9F%E7%A8%B3%E5%AE%9A%E6%80%A7/index.html">
 <meta property="og:site_name" content="glj&#39;s bolg">
+<meta property="og:description" content="最近负责系统稳定性相关的工作，针对重io的系统根据自己的理解整理出这份文档，简单罗列一下系统稳定性方面可以完善的点。 主观思维 “28原则”，20%的代码影响了80%的性能问题，抓住重点 思考问题，放大基数 当系统用户量100，系统正常，放大100倍，100w倍呢… 表数据100，sql流畅，放大100倍，100w倍呢…">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-30T11:42:51.000Z">
+<meta property="article:modified_time" content="2020-10-23T01:48:51.000Z">
 <meta property="article:author" content="Gong Linjie">
+<meta property="article:tag" content="架构">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="glj&#39;s bolg" type="application/atom+xml">
@@ -152,99 +157,15 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-6.服务器%MEM指标" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-5.系统稳定性" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
 
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/21/6.%E6%9C%8D%E5%8A%A1%E5%99%A8%25MEM%E6%8C%87%E6%A0%87/">服务器%MEM指标</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/21/6.%E6%9C%8D%E5%8A%A1%E5%99%A8%25MEM%E6%8C%87%E6%A0%87/" class="archive-article-date">
-  	<time datetime="2020-09-21T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本篇记录系统短信告警%MEM超标的处理思路，系统功能主要是导入导出数据。<br>首先抛出问题：<br>1.<font color=red>为什么%MEM突然激增</font><br>2.<font color=red>为什么堆内存使用率下降，%MEM没有变化</font><br>3.<font color=red>为什么新生代空间剩余很多却young gc</font></p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/21/6.%E6%9C%8D%E5%8A%A1%E5%99%A8%25MEM%E6%8C%87%E6%A0%87/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-5.系统稳定性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/30/5.%E7%B3%BB%E7%BB%9F%E7%A8%B3%E5%AE%9A%E6%80%A7/">系统稳定性</a>
+    <h1 class="article-title" itemprop="name">
+      系统稳定性
     </h1>
   
 
@@ -262,413 +183,69 @@
 <li>“28原则”，20%的代码影响了80%的性能问题，抓住重点</li>
 <li>思考问题，放大基数<ul>
 <li>当系统用户量100，系统正常，放大100倍，100w倍呢…</li>
-<li>表数据100，sql流畅，放大100倍，100w倍呢…
-        
-      
+<li>表数据100，sql流畅，放大100倍，100w倍呢…<a id="more"></a>
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">架构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/08/30/5.%E7%B3%BB%E7%BB%9F%E7%A8%B3%E5%AE%9A%E6%80%A7/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-8.DDD（领域驱动设计）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/30/8.DDD%EF%BC%88%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%EF%BC%89/">DDD（领域驱动设计）</a>
-    </h1>
-  
-
-        
-        <a href="/2020/08/30/8.DDD%EF%BC%88%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2020-08-30T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">架构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/08/30/8.DDD%EF%BC%88%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-3.javacore和heapdump解析 基于was服务器生成" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/">javacore和heapdump解析 基于was服务器生成</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/" class="archive-article-date">
-  	<time datetime="2020-05-08T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="1-首先准备好javacore和heapdump文件和两个jar包-ha相关jar包自行下载"><a href="#1-首先准备好javacore和heapdump文件和两个jar包-ha相关jar包自行下载" class="headerlink" title="1.首先准备好javacore和heapdump文件和两个jar包(ha相关jar包自行下载)"></a>1.首先准备好<a href="ftp://public.dhe.ibm.com/software/websphere/appserv/support/tools/jca/jca466.jar">javacore</a>和heapdump文件和两个jar包(ha相关jar包自行下载)</h5><p>jca466.jar也可以分析<code>jstack pid > filename</code>生成的线程锁信息dump文件，用于死锁定位等</p>
-<img src="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/1.png" class="">
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-4.字节码增强" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/13/4.%E5%AD%97%E8%8A%82%E7%A0%81%E5%A2%9E%E5%BC%BA/">字节码增强</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/13/4.%E5%AD%97%E8%8A%82%E7%A0%81%E5%A2%9E%E5%BC%BA/" class="archive-article-date">
-  	<time datetime="2019-04-13T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本篇记录字节码增加的两种方式，<font color=red>ASM</font>和<font color=red>Javassist</font></p>
-<h3 id="1-ASM"><a href="#1-ASM" class="headerlink" title="1.ASM"></a>1.ASM</h3><p>spring中<font color=red>cglib动态代理</font>就是基于asm来进行动态增强的，<code>org.springframework.cglib.core.DefaultGeneratorStrategy</code>中就可以看到asm。本篇demo用asm来实现<font color=red>替换成员变量</font>。</p>
-<h5 id="1-1-引入asm相关jar包"><a href="#1-1-引入asm相关jar包" class="headerlink" title="1.1.引入asm相关jar包"></a>1.1.引入asm相关jar包</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.ow2.asm<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>asm<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/13/4.%E5%AD%97%E8%8A%82%E7%A0%81%E5%A2%9E%E5%BC%BA/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-7.分布式一致性算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/">分布式一致性算法</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2019-01-10T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本篇记录分布式一致性共识算法相关知识，包括<font color=red>CAP理论、BASE理论、Paxos、Raft和Zab</font>。</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">架构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-2.synchronized锁升级以及Mark Word验证" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/09/2.synchronized%E9%94%81%E5%8D%87%E7%BA%A7%E4%BB%A5%E5%8F%8AMark%20Word%E9%AA%8C%E8%AF%81/">synchronized锁升级以及Mark Word验证</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/09/2.synchronized%E9%94%81%E5%8D%87%E7%BA%A7%E4%BB%A5%E5%8F%8AMark%20Word%E9%AA%8C%E8%AF%81/" class="archive-article-date">
-  	<time datetime="2018-11-09T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于jdk1.6之前synchronized性能很差，Doug Lea开发出了juc包下一系列的锁。随着jdk版本迭代synchronized也得到了优化，本篇记录synchronized相关优化。</p>
-<h3 id="1-synchronized涉及到锁的状态"><a href="#1-synchronized涉及到锁的状态" class="headerlink" title="1.synchronized涉及到锁的状态"></a>1.synchronized涉及到<a href="https://wiki.openjdk.java.net/display/HotSpot/Synchronization" target="_blank" rel="noopener">锁的状态</a></h3><ul>
-<li><strong>自旋锁</strong>：持有锁的线程能在很短时间内释放锁资源，那些等待竞争锁的线程就不需要做内核态和用户态之间的切换，等待线程自旋获取锁，避免用户态与内核态切换带来的性能开销，切换形态需要保护用户态运行情况以及恢复现场</li>
-<li><strong>偏向锁</strong>：java对象头和栈帧中记录偏向锁的threadID，竞争的时候，比较java对象头记录的threadID，如果一致，则无需CAS来加锁解锁，如果不一致，查看java对象头记录的线程是否存活，如果没有存活，锁对象置为无锁对象，如果存活，查看栈帧信息是否继续持有，如果继续持有，撤销偏向锁，升级为轻量级锁</li>
-<li><strong>轻量级锁</strong>：线程1获取轻量级锁时会先把锁对象的对象头MarkWord复制一份到线程1的栈帧中用于存储锁记录的空间（称为DisplacedMarkWord），然后使用CAS把对象头中的内容替换为线程1存储的锁记录（DisplacedMarkWord）的地址。其他线程自旋等待，到一定次数，膨胀为重量级锁。</li>
-<li><strong>重量级锁</strong>：除了拥有锁的线程都阻塞，防止CPU空转。依赖于底层操作系统的Mutex Lock实现</li>
+</li>
 </ul>
-<p><font color=red>偏向锁和轻量级锁在用户态维护，重量级锁需要切换到内核态(os)进行维护。synchronized做这些优化的目的就是减少用户态内核态的切换</font></p>
-        
+</li>
+</ol>
+<h4 id="1-应用"><a href="#1-应用" class="headerlink" title="1.应用"></a>1.应用</h4><ul>
+<li>不需要实时的写操作，考虑异步</li>
+<li>缓存数据是否合理</li>
+<li>单点崩溃–&gt;退出路由，自动扩容或者应用重启</li>
+<li>异常数过高–&gt;动态切换分支</li>
+<li>日志埋点，统计用户调用链路</li>
+</ul>
+<h4 id="2-监控告警体系"><a href="#2-监控告警体系" class="headerlink" title="2.监控告警体系"></a>2.监控告警体系</h4><ul>
+<li>单机应用限流，单个用户限流</li>
+<li>接口维度限流，熔断 限流 正常3种状态自动切换（限流影响用户体验）</li>
+<li>完善监控指标，（异常流量，频繁fullgc，慢调用…）</li>
+<li>监控平台–&gt;监控指标是否完善（mem，cpu，jvm，gc，db，qps，rt…）</li>
+</ul>
+<h4 id="3-数据库"><a href="#3-数据库" class="headerlink" title="3.数据库"></a>3.数据库</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">1. sql</span><br><span class="line">	a. where条件没有主键却只查一条记录的sql 加上limit 1</span><br><span class="line">	b. 合并sql，一次调用一张表尽量就查询一次修改一次</span><br><span class="line">	c. 部分sql，没有必要查询这么多字段</span><br><span class="line">	     i. 多余字段会增加传输时间和网络开销</span><br><span class="line">	     ii. 无用的大字段，如 varchar、blob、text，会增加 io 操作。准确来说长度超过 728 字节的时候，会先把超出的数据序列化到另外一个地方，读取这条记录会增加一次 io 操作</span><br><span class="line">	     iii. 减少覆盖索引的可能性，存在回表</span><br><span class="line">	d. 慢sql修改</span><br><span class="line">	     i. 逻辑读</span><br><span class="line">	     ii. 执行计划</span><br><span class="line">	     iii. 单表数据量过大--&gt;分库分表</span><br><span class="line">2. 索引调整</span><br><span class="line">   · 是否过多</span><br><span class="line">   · 是否合理</span><br><span class="line">3. 表结构是否有必要调整</span><br><span class="line">4. 分库分表一段时间之后，数据量吃不住，增加历史表。如果用户量提升，可对分库分表进行拆库</span><br><span class="line">5. 是否读写分离</span><br><span class="line">   · 先整体评估是否需要，读写分离针对接口读明显大于写</span><br><span class="line">   · 读写分离需要考虑数据同步延迟，trade-off</span><br><span class="line">6. 数据库的故障演练</span><br><span class="line">7. 应急预案</span><br><span class="line">8. 崩溃恢复</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-jvm"><a href="#4-jvm" class="headerlink" title="4.jvm"></a>4.jvm</h4><ol>
+<li>针对目前参数，是否可以优化</li>
+<li>排查偶尔的频繁full gc<ul>
+<li>低频接口被异常流量调用</li>
+<li>查看垃圾回收日志，分析gc原因</li>
+</ul>
+</li>
+</ol>
+<h4 id="5-系统其他中间件"><a href="#5-系统其他中间件" class="headerlink" title="5.系统其他中间件"></a>5.系统其他中间件</h4>
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>有收获再赏哦<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/4.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/5.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -679,11 +256,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">juc</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">架构</a>
         		</li>
       		
 		</ul>
@@ -692,16 +265,84 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/09/2.synchronized%E9%94%81%E5%8D%87%E7%BA%A7%E4%BB%A5%E5%8F%8AMark%20Word%E9%AA%8C%E8%AF%81/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/08/30/5.%E7%B3%BB%E7%BB%9F%E7%A8%B3%E5%AE%9A%E6%80%A7/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/09/21/6.%E6%9C%8D%E5%8A%A1%E5%99%A8%25MEM%E6%8C%87%E6%A0%87/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          服务器%MEM指标
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/30/8.DDD%EF%BC%88%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%EF%BC%89/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">DDD（领域驱动设计）</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -716,181 +357,43 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-8.String.intern()" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/10/8.String.intern()/">String.intern()</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/10/8.String.intern()/" class="archive-article-date">
-  	<time datetime="2018-09-10T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本篇记录intern()相关知识以及《深入理解Java虚拟机（第二版）》挖的小坑。</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">奇怪的知识</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/10/8.String.intern()/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#主观思维"><span class="toc-number">1.</span> <span class="toc-text">主观思维</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-应用"><span class="toc-number">2.</span> <span class="toc-text">1.应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-监控告警体系"><span class="toc-number">3.</span> <span class="toc-text">2.监控告警体系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-数据库"><span class="toc-number">4.</span> <span class="toc-text">3.数据库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-jvm"><span class="toc-number">5.</span> <span class="toc-text">4.jvm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-系统其他中间件"><span class="toc-number">6.</span> <span class="toc-text">5.系统其他中间件</span></a></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
+  
+  
+  
+
+  
+
+  
+
+
+
+  
 
 
 
 
   
-    <article id="post-1.ThreadLocal" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/22/1.ThreadLocal/">ThreadLocal</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/22/1.ThreadLocal/" class="archive-article-date">
-  	<time datetime="2018-05-22T12:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1.首次接触threadlocal是在数据库连接池，connection和线程进行绑定，一个为键一个为值存入map，实现每个线程都获取自己的数据库连接。<br>2.spring的@transactional也是通过threadlocal来实现注解下所有方法是同一个connection，来实现事务一致性。<code>org.springframework.transaction.support.TransactionSynchronizationManager</code>打开就能看到threadlocal使用。<br>本篇基于jdk1.8，记录一下threadlocaln内部<font color=red>为什么使用弱引用</font>和<font color=red>为什么存在内存泄漏</font></p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">juc</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/22/1.ThreadLocal/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
 
 
 
-
-
-
-
-  
-  
 
 
           </div>
@@ -918,8 +421,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

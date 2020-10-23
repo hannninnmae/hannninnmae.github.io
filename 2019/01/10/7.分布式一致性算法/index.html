@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>glj&#39;s bolg</title>
+  <title>分布式一致性算法 | glj&#39;s bolg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="glj&#39;s bolg">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="本篇记录分布式一致性共识算法相关知识，包括CAP理论、BASE理论、Paxos、Raft和Zab。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式一致性算法">
+<meta property="og:url" content="http://yoursite.com/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="glj&#39;s bolg">
+<meta property="og:description" content="本篇记录分布式一致性共识算法相关知识，包括CAP理论、BASE理论、Paxos、Raft和Zab。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/2.png">
+<meta property="article:published_time" content="2019-01-10T11:42:51.000Z">
+<meta property="article:modified_time" content="2020-10-16T10:04:54.000Z">
 <meta property="article:author" content="Gong Linjie">
+<meta property="article:tag" content="架构">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/1.png">
   
     <link rel="alternative" href="/atom.xml" title="glj&#39;s bolg" type="application/atom+xml">
   
@@ -152,422 +160,15 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-6.服务器%MEM指标" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-7.分布式一致性算法" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
 
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/21/6.%E6%9C%8D%E5%8A%A1%E5%99%A8%25MEM%E6%8C%87%E6%A0%87/">服务器%MEM指标</a>
-    </h1>
-  
-
-        
-        <a href="/2020/09/21/6.%E6%9C%8D%E5%8A%A1%E5%99%A8%25MEM%E6%8C%87%E6%A0%87/" class="archive-article-date">
-  	<time datetime="2020-09-21T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本篇记录系统短信告警%MEM超标的处理思路，系统功能主要是导入导出数据。<br>首先抛出问题：<br>1.<font color=red>为什么%MEM突然激增</font><br>2.<font color=red>为什么堆内存使用率下降，%MEM没有变化</font><br>3.<font color=red>为什么新生代空间剩余很多却young gc</font></p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/09/21/6.%E6%9C%8D%E5%8A%A1%E5%99%A8%25MEM%E6%8C%87%E6%A0%87/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-5.系统稳定性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/30/5.%E7%B3%BB%E7%BB%9F%E7%A8%B3%E5%AE%9A%E6%80%A7/">系统稳定性</a>
-    </h1>
-  
-
-        
-        <a href="/2020/08/30/5.%E7%B3%BB%E7%BB%9F%E7%A8%B3%E5%AE%9A%E6%80%A7/" class="archive-article-date">
-  	<time datetime="2020-08-30T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近负责系统稳定性相关的工作，针对<font color=red>重io</font>的系统根据自己的理解整理出这份文档，简单罗列一下系统稳定性方面可以完善的点。</p>
-<h4 id="主观思维"><a href="#主观思维" class="headerlink" title="主观思维"></a>主观思维</h4><ol>
-<li>“28原则”，20%的代码影响了80%的性能问题，抓住重点</li>
-<li>思考问题，放大基数<ul>
-<li>当系统用户量100，系统正常，放大100倍，100w倍呢…</li>
-<li>表数据100，sql流畅，放大100倍，100w倍呢…
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">架构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/08/30/5.%E7%B3%BB%E7%BB%9F%E7%A8%B3%E5%AE%9A%E6%80%A7/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-8.DDD（领域驱动设计）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/30/8.DDD%EF%BC%88%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%EF%BC%89/">DDD（领域驱动设计）</a>
-    </h1>
-  
-
-        
-        <a href="/2020/08/30/8.DDD%EF%BC%88%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2020-08-30T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">架构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/08/30/8.DDD%EF%BC%88%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-3.javacore和heapdump解析 基于was服务器生成" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/">javacore和heapdump解析 基于was服务器生成</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/" class="archive-article-date">
-  	<time datetime="2020-05-08T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="1-首先准备好javacore和heapdump文件和两个jar包-ha相关jar包自行下载"><a href="#1-首先准备好javacore和heapdump文件和两个jar包-ha相关jar包自行下载" class="headerlink" title="1.首先准备好javacore和heapdump文件和两个jar包(ha相关jar包自行下载)"></a>1.首先准备好<a href="ftp://public.dhe.ibm.com/software/websphere/appserv/support/tools/jca/jca466.jar">javacore</a>和heapdump文件和两个jar包(ha相关jar包自行下载)</h5><p>jca466.jar也可以分析<code>jstack pid > filename</code>生成的线程锁信息dump文件，用于死锁定位等</p>
-<img src="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/1.png" class="">
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/08/3.javacore%E5%92%8Cheapdump%E8%A7%A3%E6%9E%90%20%E5%9F%BA%E4%BA%8Ewas%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%94%9F%E6%88%90/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-4.字节码增强" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/13/4.%E5%AD%97%E8%8A%82%E7%A0%81%E5%A2%9E%E5%BC%BA/">字节码增强</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/13/4.%E5%AD%97%E8%8A%82%E7%A0%81%E5%A2%9E%E5%BC%BA/" class="archive-article-date">
-  	<time datetime="2019-04-13T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本篇记录字节码增加的两种方式，<font color=red>ASM</font>和<font color=red>Javassist</font></p>
-<h3 id="1-ASM"><a href="#1-ASM" class="headerlink" title="1.ASM"></a>1.ASM</h3><p>spring中<font color=red>cglib动态代理</font>就是基于asm来进行动态增强的，<code>org.springframework.cglib.core.DefaultGeneratorStrategy</code>中就可以看到asm。本篇demo用asm来实现<font color=red>替换成员变量</font>。</p>
-<h5 id="1-1-引入asm相关jar包"><a href="#1-1-引入asm相关jar包" class="headerlink" title="1.1.引入asm相关jar包"></a>1.1.引入asm相关jar包</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.ow2.asm<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>asm<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/13/4.%E5%AD%97%E8%8A%82%E7%A0%81%E5%A2%9E%E5%BC%BA/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-7.分布式一致性算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/">分布式一致性算法</a>
+    <h1 class="article-title" itemprop="name">
+      分布式一致性算法
     </h1>
   
 
@@ -581,9 +182,85 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本篇记录分布式一致性共识算法相关知识，包括<font color=red>CAP理论、BASE理论、Paxos、Raft和Zab</font>。</p>
-        
+<a id="more"></a>
+<h3 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h3><p>1.<strong>一致性</strong>（Consistency）：每次读操作都能保证返回的是最新数据，在分布式系统中，如果能针对一个数据项的更新执行成功后，所有的用户都可以读到其最新的值，这样的系统就被认为具有严格的一致性。<br>2.<strong>可用性</strong>（Availablity）：任何一个没有发生故障的节点，会在合理的时间内返回一个正常的结果，也就是对于用户的每一个请求总是能够在有限的时间内返回结果；<br>3.<strong>分区容忍性</strong>（Partition-torlerance）：当节点间出现网络分区（不同节点处于不同的子网络，子网络之间是联通的，但是子网络之间是无法联通的，也就是被切分成了孤立的集群网络），照样可以提供满足一致性和可用性的服务，除非整个网络环境都发生了故障。<br><font color=red>对于分布式系统而言，分区容错性是必须要满足的，所以P必须要保证，那么就要在C和A之间做权衡</font>。<br>CP：有两个或以上节点时，当网络分区发生时，集群中两个节点不能相互通信。此时如果保证数据的一致性C，那么必然会有一个节点被标记为不可用的状态，违反了可用性A的要求，只能保证CP。<br>AP：反之，如果保证可用性A，即两个节点可以继续各自处理请求，那么由于网络不通不能同步数据，必然又会导致数据的不一致，只能保证AP。<br>如何在可用性和一致性进行权衡，所以就出现了各种一致性的理论与算法。</p>
+<h3 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h3><p>1.<strong>基本可用</strong>(Basically Available)：指分布式系统在出现不可预知故障的时候，允许损失部分可用性，这绝不等价于系统不可用。<br>2.<strong>弱状态</strong>(Soft State)：也称为软状态，和硬状态相对，是指允许系统中的数据存在中间状态，并认为该中间状态的存在不会影响系统的整体可用性，即允许系统在不同节点的数据副本之间进行数据同步的过程存在延时。<br>3.<strong>最终一致性</strong>(Eventual Consistency)：强调的是系统中所有的数据副本，在经过一段时间的同步后，最终能够达到一个一致的状态，而不需要实时保证系统数据的强一致性。</p>
+<h3 id="1-Paxos"><a href="#1-Paxos" class="headerlink" title="1.Paxos"></a>1.Paxos</h3><h5 id="1-1-quorum机制"><a href="#1-1-quorum机制" class="headerlink" title="1.1.quorum机制"></a>1.1.quorum机制</h5><p>1.一句话解释：在 N 个副本中，一次更新成功的如果有 W 个，在读取数据时是要从大于 N－W 个副本中读取才能至少读到一个更新的数据。<br>2.和 quorum 机制对应的是<font color=red>WARO</font>(Write All Read one)，是一种简单的副本控制协议，当 Client 请求向某副本写数据时，只有当所有的副本都更新成功之后，这次写操作才算成功，否则视为失败。WARO 优先保证读服务，因为所有的副本更新成功，才能视为更新成功，从而保证了所有的副本一致，只需要读任何一个副本上的数据即可。写服务的可用性较低，因为只要有一个副本更新失败，此次写操作就失败了。WARO 牺牲了写服务，最大程度地增强了读服务的可用性，而quorum就是在写服务和读服务之间进行的一个折衷。<br>3.quorum机制的使用需要配合一个获取最新成功提交的版本号的 metadata 服务，用来确定最新已经成功提交的版本号，然后从已经读到的数据中就可以确认最新写入的数据。quorum是分布式系统中常用的一种机制，用来保证数据冗余和最终一致性的投票算法，在 Paxos、Raft 和 ZooKeeper 的 Zab 等算法中，都可以看到quorum机制的应用。</p>
+<h5 id="1-2-paxos算法中的角色"><a href="#1-2-paxos算法中的角色" class="headerlink" title="1.2.paxos算法中的角色"></a>1.2.paxos算法中的角色</h5><p>1.Proposer提案者：Proposer可以有多个，在流程开始时，Proposer 提出议案，也就是value，value可以是任何操作。不同的Proposer 可以提出不同的甚至矛盾的 value，但同一轮Paxos过程，最多只有一个value被批准。<br>2.Acceptor批准者：在集群中，Acceptor有 N 个，Acceptor之间完全对等独立，Proposer 提出的 value 必须获得超过半数（N/2+1）的Acceptor批准后才能通过。<br>3.Learner学习者：Learner不参与选举，而是学习被批准的value，Learner主要参与相关的状态机同步流程。<br><font color=red>其他paxos算法的实现，只是名称叫法不同，底层含义都是相通的</font>。</p>
+<h5 id="1-3-准备阶段"><a href="#1-3-准备阶段" class="headerlink" title="1.3.准备阶段"></a>1.3.准备阶段</h5><p>1.Proposer生成全局唯一且递增的ProposalID，向集群的所有机器发送prepare请求<br>2.Acceptor收到prepare请求后，判断收到的ProposalID是否比之前已响应的所有提案的id大？如果否，则不回复或者回复 Error。如果是，则在本地持久化该ProposalID作为Max_id；回复请求，并带上提案中ProposalID最大的value，如果此时还没有已经 Accept 的提案，则返回value为空<br>3.做出承诺，不会Accept任何小于Max_id的提案</p>
+<h5 id="1-4-选举阶段"><a href="#1-4-选举阶段" class="headerlink" title="1.4.选举阶段"></a>1.4.选举阶段</h5><p>1.Proposer 发送 Accept<br>&emsp;&emsp;a. 若majority的Acceptor回复，则 Porposer 发出 accept 请求，并带上Max_id的value或自己指定的value。<br>&emsp;&emsp;b. 若不是majority的Acceptor回复，则尝试更新生成更大的ProposalID，再转到准备阶段执行。<br>2.Acceptor 应答 Accept<br>&emsp;&emsp;a. 若收到的 ProposalID &gt;= Max_id（一般情况下是等于），则回复提交成功，并持久化ProposalID和 value；<br>&emsp;&emsp;b. 若收到的 ProposalID &lt; Max_id，则不回复或者回复提交失败。<br>3.Proposer 统计投票<br>&emsp;&emsp;a. 若majority的Acceptor回复，则表示提交 value 成功，此时广播给所有的Proposer、Learner，通知它们已commit的value；<br>&emsp;&emsp;b. 若不是majority的Acceptor回复或收到提交失败的回复，则尝试更新生成更大的ProposalID，转到准备阶段执行。</p>
+<h5 id="1-5-Paxos相关问题"><a href="#1-5-Paxos相关问题" class="headerlink" title="1.5.Paxos相关问题"></a>1.5.Paxos相关问题</h5><p>1.<font color=red>paxos活锁怎么解决</font><br>• Proposer失败之后等待随机时间后重新发起请求<br>• Multi-Paxos：选取一个主proposer，只有主proposer才能提案。同时省去prepare阶段，提高效率<br>2.<font color=red>Acceptor需要接受更大的id，Max_id有什么意义？</font><br>可以防止其中一个Proposer崩溃宕机产生阻塞，允许其他Proposer用更大id来抢占临时的访问权。充当物理时钟。<br>3.<font color=red>如何产生唯一的编号，也就是ProposalID？</font><br>唯一编号是让所有的 Proposer 都从不相交的数据集合中进行选择，需要保证在不同Proposer之间不重复，比如系统有 5 个Proposer，则可为每一个Proposer分配一个标识 j(0~4)，那么每一个 Proposer 每次提出决议的编号可以为 5*i + j，i 可以用来表示提出议案的次数。</p>
+<h5 id="1-6-总结"><a href="#1-6-总结" class="headerlink" title="1.6.总结"></a>1.6.总结</h5><p>paxos最根本的原理是<font color=red>两个过半集合必然存在非空交集，数学中的过半原理</font>。paxos是理论算法，其中zab，raft和众多开源算法是对paxos的工业级实现，是对其算法的实现。Multi-Paxos中Leader的存在是为了提升决议效率，Leader的有无和数目并不影响决议一致性。</p>
+<!--
+https://blog.csdn.net/u013679744/article/details/79222103
+https://zhuanlan.zhihu.com/p/31780743
+-->
+<h3 id="2-Raft"><a href="#2-Raft" class="headerlink" title="2.Raft"></a>2.Raft</h3><p>raft将共识问题分解成三个相对独立的问题，<font color=red>leader election、log replication和safety</font>。流程是先选举出leader，然后leader负责复制、提交log（log中包含command）。</p>
+<h5 id="2-1-leader-election"><a href="#2-1-leader-election" class="headerlink" title="2.1.leader election"></a>2.1.leader election</h5><img src="/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/1.png" class="">
+<p>1.follower–&gt;在一定时间内没有收到leader的心跳–&gt;candidate–&gt;发起选举–&gt;直到某个candidate获取到majority票数–&gt;leader<br>2.candidate–&gt;发现新的leader或者new term–&gt;follower<br>3.leader–&gt;发现更高term的节点–&gt;follower<br>Raft引入<font color=red>randomized election timeouts来尽量避免平票情况</font>。同时leader-based 共识算法中，节点的数目都是<font color=red>奇数</font>，尽量保证majority的出现，并且规定<font color=red>被投票节点日志不能比投票节点日志旧</font>。</p>
+<h5 id="2-2-log-replication"><a href="#2-2-log-replication" class="headerlink" title="2.2.log replication"></a>2.2.log replication</h5><p>• <font color=red>committed</font>：日志已经被复制到了majority节点<br>• <font color=red>applied</font>：各自节点执行command到状态机<br>为了保证不同节点get the same inputs in the same order，raft使用replicated log，log具有持久化、保序的特点，是大多数分布式系统的基石。<br>leader只需要日志committed即可向客户端返回，一旦向客户端返回成功消息，其他节点就必须保证log entries包含的command在任何异常情况下都不会发生回滚。为了保证高可用，最终一致性，leader会不断尝试给follower发log entries，直到所有节点的log entries都相同。</p>
+<!--
+Raft中Leader为自己和所有Follower各维护一个nextIndex值，其表示Leader紧接下来要处理的指令id以及将要发给Follower的指令id，LnextIndex不等于FnextIndex时代表Leader操作日志和Follower操作日志存在不一致，这时将从Follower操作日志中最初不一致的地方开始，由Leader操作日志覆盖Follower，直到LnextIndex、FnextIndex相等。
+-->
+<h5 id="2-3-safety"><a href="#2-3-safety" class="headerlink" title="2.3.safety"></a>2.3.safety</h5><p><strong>Election Safety</strong>：at most one leader can be elected in a given term.<br>选举安全性，即任一任期内最多一个leader被选出。<br><strong>Leader Append-Only</strong>：a leader never overwrites or deletes  entries in its log;it only appends new entries.<br>leader只追加自己的log entry，不删减或重写自己的log entry。<br><strong>Log Matching</strong>：if two logs contain an entry with the same index and term,then the logs are identical in all entries up through the given index.<br>如果两个节点上的某个log entry的log index相同且term相同，那么在该index之前的所有log entry应该都是相同的。当出现了leader与follower不一致的情况，leader强制follower复制自己的log。leader同步日志时，会将当前term及以前term的日志都会同步到其他节点，避免节点频繁选举造成的log entry回滚问题。<br><strong>Leader Completeness</strong>：if a log entry is commited in a given term,then that entry will be present in the logs of the leaders for all higher-numbered term.<br>leader完整性，如果一个log entry在某个任期被committed，那么这条日志一定会出现在所有更高term的leader的日志里面。<br><strong>Safety Machine Safety</strong>：if a server has applied a log entry at a given index to its state machine,no other server will ever apply a diffrent log entry for the same index.<br>如果leader已经apply指定索引的日志到状态机，其他节点则不会apply其他日志到该索引，保证日志不可回滚。</p>
+<h5 id="2-4-Raft相关问题"><a href="#2-4-Raft相关问题" class="headerlink" title="2.4.Raft相关问题"></a>2.4.Raft相关问题</h5><p>raft的脑裂（brain split）：</p>
+<img src="/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/2.png" class="">
+<p>Raft 脑裂：小集群的leader如果收不到majority节点的消息，就无法响应写请求，那么可以自己step down，自行转换到follower状态。（图中的Node B）</p>
+<h5 id="2-5-总结："><a href="#2-5-总结：" class="headerlink" title="2.5.总结："></a>2.5.总结：</h5><p>Raft要求具备唯一Leader，并把一致性问题具体化为保持日志副本的一致性。Raft利用term充当物理时钟，通过约束<font color=red>选举规则和leader日志最新</font>来实现分布式的最终一致性，高可用，去中心化特点。</p>
+<!--
+http://thesecretlivesofdata.com/raft/
+https://www.cnblogs.com/xybaby/p/10124083.html
+https://zhuanlan.zhihu.com/p/32052223
+https://www.cnblogs.com/mindwind/p/5231986.html
+-->
+<h3 id="3-Zab"><a href="#3-Zab" class="headerlink" title="3.Zab"></a>3.Zab</h3><h5 id="3-1-Zxid"><a href="#3-1-Zxid" class="headerlink" title="3.1.Zxid"></a>3.1.Zxid</h5><p>Zxid是Zab协议的一个事务编号，Zxid是一个64位的数字，其中低32位是一个简单的单调递增计数器，针对客户端每一个事务请求，计数器加1；而高32位则代表Leader周期年代的编号。每当有一个新的Leader选举出现时，就会从这个Leader服务器上取出其本地日志中最大事务的Zxid，并从中读取epoch值，然后加1，以此作为新的周期ID。</p>
+<h5 id="3-2-消息广播阶段"><a href="#3-2-消息广播阶段" class="headerlink" title="3.2.消息广播阶段"></a>3.2.消息广播阶段</h5><p>Leader节点将请求包装成Proposal事务并携带Zxid通过Follower节点各自的消息队列进行广播，收集majority节点的ack进行Commit，然后再次广播Commit信息，Follower收到Commit之后完成各自的事务提交。</p>
+<h5 id="3-3-崩溃恢复阶段"><a href="#3-3-崩溃恢复阶段" class="headerlink" title="3.3.崩溃恢复阶段"></a>3.3.崩溃恢复阶段</h5><p>集群初始化和Leader宕机或断连会进入崩溃恢复阶段，重新进行Leader选举。投票过程实现<font color=red>FastLeaderElection</font>算法，其实就是对比Zxid的过程，首先选举epoch最大的，如果epoch相等，则选zxid最大的，若epoch和zxid都相等，则选择server id最大的，就是配置 zoo.cfg中的myid。如果没有节点获得<font color=red>majority</font>投票数则重新投票选举；如果有节点获得<font color=red>majority</font>投票数，<font color=red>majority</font>节点完成数据同步后（proposal但未commit进行同步，删除其他节点未proposal），则会成为Leader节点。</p>
+<h5 id="3-4-Zab相关问题"><a href="#3-4-Zab相关问题" class="headerlink" title="3.4.Zab相关问题"></a>3.4.Zab相关问题</h5><p>1.如何保证已经被处理的消息不丢失<br>Leader本地commit并向客户端返回结果，广播commit信息时宕机，导致部分节点没有commit。旧leader的zxid肯定小于新leader，新leader将自己事务日志中<font color=red>proposal但未commit</font>的消息处理，将proposal和commit通过各自的消息队列进行广播。<br>2.被丢弃的消息不能再次出现<br>leader接收请求生成proposal未发送就挂了。旧leader的zxid肯定小于新leader，当旧leader作为follower重新加入后，新leader会让它将所有的拥有旧epoch号的<font color=red>未被commit的proposal清除</font>。</p>
+<!--
+https://blog.csdn.net/u013679744/article/details/79240249
+-->
+<h3 id="4-Raft和Zab对比"><a href="#4-Raft和Zab对比" class="headerlink" title="4.Raft和Zab对比"></a>4.Raft和Zab对比</h3><h5 id="4-1-心跳检测"><a href="#4-1-心跳检测" class="headerlink" title="4.1.心跳检测"></a>4.1.心跳检测</h5><p>Raft：<font color=red>follower端检测</font>。follower在规定时间内未收到leader的心跳信息，则follower转变成candidate，自增term发起新一轮的投票，leader遇到新的term则自动转变成follower的状态。<br>Zab：<font color=red>leader和follower都有各自的检测超时方式</font>，leader是检测是否过半follower心跳回复了，follower检测leader是否发送心跳了。一旦leader检测失败，则leader进入LOOKING状态，其他follower过一段时间因收不到leader心跳也会进入LOOKING状态，从而出发新的leader选举。一旦follower检测失败了，则该follower进入LOOKING状态，此时leader和其他follower仍然保持良好，则该follower仍然是去学习上述leader的投票，而不是触发新一轮的leader选举。</p>
+<h5 id="4-2-Leader宕机，残留数据如何处理"><a href="#4-2-Leader宕机，残留数据如何处理" class="headerlink" title="4.2.Leader宕机，残留数据如何处理"></a>4.2.Leader宕机，残留数据如何处理</h5><p>Raft：<font color=red>保守策略，每次leader选举并没有马上同步数据</font>，等下次请求。Raft当前term的Leader不能“直接”提交之前term的entries。必须要等到当前term有entry过半了，才顺便一起将之前term的entries进行提交。只有被复制到majority节点才算committed，也有可能被覆盖</p>
+<!--
+现在有5台机器(ABCDE)。ABC日志写到index=2这个位置（第二个日志的任期是2，同时这个日志被复制到ABC三个节点上），D只有index=1有日志，E日志写到index=2。但是E的index=2的日志是任期3写的。重点来了，现在假定A是leader，这个时候虽然数据已被过半数确认了，但是这个时候A宕机了，E成为leader（leader的index=2的任期是3，比其他的都要新，可以当选），这个时候E会把index=2的日志复制到其他follower上去，之前ABC上index=2的日志就被覆盖了。所以这个日志不一定就会被commit。结论：未commit的日志可能重新被commit或者被覆盖
+-->
+<p>Zab：<font color=red>激进策略，每次leader选举都会同步数据，只要提交就会应用到状态机中</font></p>
+<h5 id="4-3-总结"><a href="#4-3-总结" class="headerlink" title="4.3.总结"></a>4.3.总结</h5><p>Raft和Zab主要用于构建一个高可用的<font color=red>分布式数椐主备系统</font>，而Paxos算法则是用于构建一个分布式的<font color=red>一致性状态机系统</font>。</p>
+
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>有收获再赏哦<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/4.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/5.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -603,16 +280,84 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/01/10/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/04/13/4.%E5%AD%97%E8%8A%82%E7%A0%81%E5%A2%9E%E5%BC%BA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          字节码增强
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/11/09/2.synchronized%E9%94%81%E5%8D%87%E7%BA%A7%E4%BB%A5%E5%8F%8AMark%20Word%E9%AA%8C%E8%AF%81/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">synchronized锁升级以及Mark Word验证</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -627,270 +372,43 @@
         </div>
         
         
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-    <article id="post-2.synchronized锁升级以及Mark Word验证" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/09/2.synchronized%E9%94%81%E5%8D%87%E7%BA%A7%E4%BB%A5%E5%8F%8AMark%20Word%E9%AA%8C%E8%AF%81/">synchronized锁升级以及Mark Word验证</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/09/2.synchronized%E9%94%81%E5%8D%87%E7%BA%A7%E4%BB%A5%E5%8F%8AMark%20Word%E9%AA%8C%E8%AF%81/" class="archive-article-date">
-  	<time datetime="2018-11-09T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于jdk1.6之前synchronized性能很差，Doug Lea开发出了juc包下一系列的锁。随着jdk版本迭代synchronized也得到了优化，本篇记录synchronized相关优化。</p>
-<h3 id="1-synchronized涉及到锁的状态"><a href="#1-synchronized涉及到锁的状态" class="headerlink" title="1.synchronized涉及到锁的状态"></a>1.synchronized涉及到<a href="https://wiki.openjdk.java.net/display/HotSpot/Synchronization" target="_blank" rel="noopener">锁的状态</a></h3><ul>
-<li><strong>自旋锁</strong>：持有锁的线程能在很短时间内释放锁资源，那些等待竞争锁的线程就不需要做内核态和用户态之间的切换，等待线程自旋获取锁，避免用户态与内核态切换带来的性能开销，切换形态需要保护用户态运行情况以及恢复现场</li>
-<li><strong>偏向锁</strong>：java对象头和栈帧中记录偏向锁的threadID，竞争的时候，比较java对象头记录的threadID，如果一致，则无需CAS来加锁解锁，如果不一致，查看java对象头记录的线程是否存活，如果没有存活，锁对象置为无锁对象，如果存活，查看栈帧信息是否继续持有，如果继续持有，撤销偏向锁，升级为轻量级锁</li>
-<li><strong>轻量级锁</strong>：线程1获取轻量级锁时会先把锁对象的对象头MarkWord复制一份到线程1的栈帧中用于存储锁记录的空间（称为DisplacedMarkWord），然后使用CAS把对象头中的内容替换为线程1存储的锁记录（DisplacedMarkWord）的地址。其他线程自旋等待，到一定次数，膨胀为重量级锁。</li>
-<li><strong>重量级锁</strong>：除了拥有锁的线程都阻塞，防止CPU空转。依赖于底层操作系统的Mutex Lock实现</li>
-</ul>
-<p><font color=red>偏向锁和轻量级锁在用户态维护，重量级锁需要切换到内核态(os)进行维护。synchronized做这些优化的目的就是减少用户态内核态的切换</font></p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">juc</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/09/2.synchronized%E9%94%81%E5%8D%87%E7%BA%A7%E4%BB%A5%E5%8F%8AMark%20Word%E9%AA%8C%E8%AF%81/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#CAP理论"><span class="toc-number">1.</span> <span class="toc-text">CAP理论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BASE理论"><span class="toc-number">2.</span> <span class="toc-text">BASE理论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Paxos"><span class="toc-number">3.</span> <span class="toc-text">1.Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-1-quorum机制"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.1.quorum机制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-2-paxos算法中的角色"><span class="toc-number">3.0.2.</span> <span class="toc-text">1.2.paxos算法中的角色</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-3-准备阶段"><span class="toc-number">3.0.3.</span> <span class="toc-text">1.3.准备阶段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-4-选举阶段"><span class="toc-number">3.0.4.</span> <span class="toc-text">1.4.选举阶段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-5-Paxos相关问题"><span class="toc-number">3.0.5.</span> <span class="toc-text">1.5.Paxos相关问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-总结"><span class="toc-number">3.0.6.</span> <span class="toc-text">1.6.总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Raft"><span class="toc-number">4.</span> <span class="toc-text">2.Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-leader-election"><span class="toc-number">4.0.1.</span> <span class="toc-text">2.1.leader election</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-log-replication"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.2.log replication</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-safety"><span class="toc-number">4.0.3.</span> <span class="toc-text">2.3.safety</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-Raft相关问题"><span class="toc-number">4.0.4.</span> <span class="toc-text">2.4.Raft相关问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-5-总结："><span class="toc-number">4.0.5.</span> <span class="toc-text">2.5.总结：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Zab"><span class="toc-number">5.</span> <span class="toc-text">3.Zab</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-Zxid"><span class="toc-number">5.0.1.</span> <span class="toc-text">3.1.Zxid</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-消息广播阶段"><span class="toc-number">5.0.2.</span> <span class="toc-text">3.2.消息广播阶段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-3-崩溃恢复阶段"><span class="toc-number">5.0.3.</span> <span class="toc-text">3.3.崩溃恢复阶段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-4-Zab相关问题"><span class="toc-number">5.0.4.</span> <span class="toc-text">3.4.Zab相关问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Raft和Zab对比"><span class="toc-number">6.</span> <span class="toc-text">4.Raft和Zab对比</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#4-1-心跳检测"><span class="toc-number">6.0.1.</span> <span class="toc-text">4.1.心跳检测</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-2-Leader宕机，残留数据如何处理"><span class="toc-number">6.0.2.</span> <span class="toc-text">4.2.Leader宕机，残留数据如何处理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-3-总结"><span class="toc-number">6.0.3.</span> <span class="toc-text">4.3.总结</span></a></li></ol></li></ol></li></ol>
+                    </div>
+                </span>
             </div>
         </div>
         
-        
     </div>
 </aside>
 
 
 
+  
+  
+  
+
+  
+
+  
+
+
+
+  
 
 
 
 
   
-    <article id="post-8.String.intern()" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/10/8.String.intern()/">String.intern()</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/10/8.String.intern()/" class="archive-article-date">
-  	<time datetime="2018-09-10T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本篇记录intern()相关知识以及《深入理解Java虚拟机（第二版）》挖的小坑。</p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">奇怪的知识</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/10/8.String.intern()/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
 
 
 
-
-
-
-
-  
-    <article id="post-1.ThreadLocal" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/22/1.ThreadLocal/">ThreadLocal</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/22/1.ThreadLocal/" class="archive-article-date">
-  	<time datetime="2018-05-22T12:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1.首次接触threadlocal是在数据库连接池，connection和线程进行绑定，一个为键一个为值存入map，实现每个线程都获取自己的数据库连接。<br>2.spring的@transactional也是通过threadlocal来实现注解下所有方法是同一个connection，来实现事务一致性。<code>org.springframework.transaction.support.TransactionSynchronizationManager</code>打开就能看到threadlocal使用。<br>本篇基于jdk1.8，记录一下threadlocaln内部<font color=red>为什么使用弱引用</font>和<font color=red>为什么存在内存泄漏</font></p>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">juc</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/22/1.ThreadLocal/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-  
-  
 
 
           </div>
@@ -918,8 +436,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
