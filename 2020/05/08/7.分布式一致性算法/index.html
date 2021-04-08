@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/05/08/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/1.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/08/7.%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/2.png">
 <meta property="article:published_time" content="2020-05-08T11:42:51.000Z">
-<meta property="article:modified_time" content="2021-04-07T14:50:47.146Z">
+<meta property="article:modified_time" content="2021-04-08T13:28:23.145Z">
 <meta property="article:author" content="Gong Linjie">
 <meta property="article:tag" content="架构">
 <meta name="twitter:card" content="summary">
@@ -222,7 +222,7 @@ https://blog.csdn.net/u013679744/article/details/79240249
 -->
 <h3 id="4-Raft和Zab对比"><a href="#4-Raft和Zab对比" class="headerlink" title="4.Raft和Zab对比"></a>4.Raft和Zab对比</h3><h5 id="4-1-心跳检测"><a href="#4-1-心跳检测" class="headerlink" title="4.1.心跳检测"></a>4.1.心跳检测</h5><p>Raft：<font color=red>follower端检测</font>。follower在规定时间内未收到leader的心跳信息，则follower转变成candidate，自增term发起新一轮的投票，leader遇到新的term则自动转变成follower的状态。<br>Zab：<font color=red>leader和follower都有各自的检测超时方式</font>，leader是检测是否过半follower心跳回复了，follower检测leader是否发送心跳了。一旦leader检测失败，则leader进入LOOKING状态，其他follower过一段时间因收不到leader心跳也会进入LOOKING状态，从而出发新的leader选举。一旦follower检测失败了，则该follower进入LOOKING状态，此时leader和其他follower仍然保持良好，则该follower仍然是去学习上述leader的投票，而不是触发新一轮的leader选举。</p>
 <h5 id="4-2-Leader候选机器的差异"><a href="#4-2-Leader候选机器的差异" class="headerlink" title="4.2.Leader候选机器的差异"></a>4.2.Leader候选机器的差异</h5><p>Raft：具有<font color=red>最大已commit编号（不包括未commit的Proposal）</font>的机器才有资格成为新的Leader，本质上还是选择<font color=red>具有最新日志</font>的机器才有资格成为新的Leader<br>Zab：具有<font color=red>最大ZXID编号（包括未commit的Proposal）</font>的机器才有资格成为新的Leader</p>
-<h5 id="4-3-Leader宕机，残留数据如何处理"><a href="#4-3-Leader宕机，残留数据如何处理" class="headerlink" title="4.3.Leader宕机，残留数据如何处理"></a>4.3.Leader宕机，残留数据如何处理</h5><p>Raft：<font color=red>保守策略，每次leader选举并没有马上同步数据</font>，等下次请求。Raft当前term的Leader不能“直接”提交之前term的entries。必须要等到当前term有entry过半了，才顺便一起将之前term的entries进行提交。<font color=red>未commit的日志可能重新被commit或者被覆盖</font>。</p>
+<h5 id="4-3-Leader宕机，残留数据如何处理"><a href="#4-3-Leader宕机，残留数据如何处理" class="headerlink" title="4.3.Leader宕机，残留数据如何处理"></a>4.3.Leader宕机，残留数据如何处理</h5><p>Raft：<font color=red>保守策略，每次leader选举并没有马上同步数据</font>，等下次请求。Raft当前term的Leader不能“直接”提交之前term的entries。必须要等到当前term有entry过半了，才顺便一起将之前term的entries进行提交。<font color=red>未commit的日志可能重新被commit或者被覆盖</font>。因为新Leader只关注自身还没被commit的Proposal，而不关心其它机器的未commit的Proposal。</p>
 <!--
 现在有5台机器(ABCDE)。ABC日志写到index=2这个位置（第二个日志的任期是2，同时这个日志被复制到ABC三个节点上），D只有index=1有日志，E日志写到index=2。但是E的index=2的日志是任期3写的。重点来了，现在假定A是leader，这个时候虽然数据已被过半数确认了，但是这个时候A宕机了，E成为leader（leader的index=2的任期是3，比其他的都要新，可以当选），这个时候E会把index=2的日志复制到其他follower上去，之前ABC上index=2的日志就被覆盖了。所以这个日志不一定就会被commit。结论：未commit的日志可能重新被commit或者被覆盖
 -->
