@@ -6,23 +6,38 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>ThreadLocal | glj&#39;s bolg</title>
+  <title>java.lang.Finalizer内存问题 | glj&#39;s bolg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.首次接触threadlocal是在数据库连接池，connection和线程进行绑定，一个为键一个为值存入map，实现每个线程都获取自己的数据库连接。2.spring的@transactional也是通过threadlocal来实现注解下所有方法是同一个connection，来实现事务一致性。org.springframework.transaction.support.TransactionS">
+  <meta name="description" content="本篇记录 java.lang.Finalizer 引发的线上内存问题。背景知识：虚拟内存">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ThreadLocal">
-<meta property="og:url" content="http://yoursite.com/2018/05/22/1.ThreadLocal/index.html">
+<meta property="og:title" content="java.lang.Finalizer内存问题">
+<meta property="og:url" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="glj&#39;s bolg">
-<meta property="og:description" content="1.首次接触threadlocal是在数据库连接池，connection和线程进行绑定，一个为键一个为值存入map，实现每个线程都获取自己的数据库连接。2.spring的@transactional也是通过threadlocal来实现注解下所有方法是同一个connection，来实现事务一致性。org.springframework.transaction.support.TransactionS">
+<meta property="og:description" content="本篇记录 java.lang.Finalizer 引发的线上内存问题。背景知识：虚拟内存">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://yoursite.com/2018/05/22/1.ThreadLocal/1.png">
-<meta property="article:published_time" content="2018-05-22T12:42:51.000Z">
-<meta property="article:modified_time" content="2020-06-02T08:11:20.000Z">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/1.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/2.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/4.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/5.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/6.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/7.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/8.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/9.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/10.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/11.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/12.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/13.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/14.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/15.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/16.png">
+<meta property="og:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/17.png">
+<meta property="article:published_time" content="2021-12-17T11:42:51.000Z">
+<meta property="article:modified_time" content="2022-06-22T10:20:58.000Z">
 <meta property="article:author" content="Gong Linjie">
 <meta property="article:tag" content="java">
-<meta property="article:tag" content="juc">
+<meta property="article:tag" content="jvm">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2018/05/22/1.ThreadLocal/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/1.png">
   
     <link rel="alternative" href="/atom.xml" title="glj&#39;s bolg" type="application/atom+xml">
   
@@ -160,7 +175,7 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-1.ThreadLocal" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-10.java.lang.Finalizer内存问题" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
 
     
@@ -168,29 +183,56 @@
         
   
     <h1 class="article-title" itemprop="name">
-      ThreadLocal
+      java.lang.Finalizer内存问题
     </h1>
   
 
         
-        <a href="/2018/05/22/1.ThreadLocal/" class="archive-article-date">
-  	<time datetime="2018-05-22T12:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-22</time>
+        <a href="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/" class="archive-article-date">
+  	<time datetime="2021-12-17T11:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-12-17</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1.首次接触threadlocal是在数据库连接池，connection和线程进行绑定，一个为键一个为值存入map，实现每个线程都获取自己的数据库连接。<br>2.spring的@transactional也是通过threadlocal来实现注解下所有方法是同一个connection，来实现事务一致性。<code>org.springframework.transaction.support.TransactionSynchronizationManager</code>打开就能看到threadlocal使用。<br>本篇基于jdk1.8，记录一下threadlocaln内部<font color=red>为什么使用弱引用</font>和<font color=red>为什么存在内存泄漏</font></p>
+        <p>本篇记录 java.lang.Finalizer 引发的线上内存问题。背景知识：<a href="https://hannninnmae.github.io/2020/11/21/6.%E6%9C%8D%E5%8A%A1%E5%99%A8%25MEM%E6%8C%87%E6%A0%87/#2-2-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E6%8A%80%E6%9C%AF" target="_blank" rel="noopener">虚拟内存</a></p>
 <a id="more"></a>
-<h5 id="1-ThreadLocal为什么使用弱引用"><a href="#1-ThreadLocal为什么使用弱引用" class="headerlink" title="1.ThreadLocal为什么使用弱引用"></a>1.ThreadLocal为什么使用弱引用</h5><ul>
-<li>SoftReference(软引用)：空间不够的时候，就会被回收，可以做缓存</li>
-<li>WeakReference(弱引用)：垃圾回收的时候会直接回收</li>
-<li>PhantomReference(虚引用)：管理直接内存，nio使用</li>
-</ul>
-<p>Thread指向ThreadLocal，ThreadLocalMap以ThreadLocal为键，弱引用指向ThreadLocal。当ThreadLocal为null时，由于只存在弱引用指向ThreadLocal，所以ThreadLocal对象会被直接回收。如果map以强引用指向ThreadLocal，即使它为null，还是有map这个强引用指向它，就会存在内存泄漏。</p>
-<img src="/2018/05/22/1.ThreadLocal/1.png" class="">
-<h5 id="2-ThreadLocal为什么存在内存泄漏"><a href="#2-ThreadLocal为什么存在内存泄漏" class="headerlink" title="2.ThreadLocal为什么存在内存泄漏"></a>2.ThreadLocal为什么存在内存泄漏</h5><p>某个持续运行的线程，当ThreadLocal为null时，value指向的内存就会永远无法访问，并且一直存活导致内存泄漏(例如图中10M空间)，所以ThreadLocal存放的对象，养成习惯不使用的时候立即remove</p>
+<h3 id="1-问题现象"><a href="#1-问题现象" class="headerlink" title="1.问题现象"></a>1.问题现象</h3><img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/1.png" class="">
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/2.png" class="">
+<p>现象总结：<br>1.老年代不断被消耗，FGC之后堆空间很多被回收<br>2.很多本不该进入老年代的对象，只能苦等FGC</p>
+<h3 id="2-排查步骤"><a href="#2-排查步骤" class="headerlink" title="2.排查步骤"></a>2.排查步骤</h3><h5 id="2-1-heap-dump"><a href="#2-1-heap-dump" class="headerlink" title="2.1.heap dump"></a>2.1.heap dump</h5><p>在dump文件上面找到大量对象的根源</p>
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/4.png" class="">
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/5.png" class="">
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/6.png" class="">
+<p>从两个点入手<br>1.好奇 SSLSocketImpl 是什么<br>2.从”oapi.dingtalk.com”开始review代码</p>
+<h5 id="2-2-查阅资料"><a href="#2-2-查阅资料" class="headerlink" title="2.2.查阅资料"></a>2.2.查阅资料</h5><h6 id="2-2-1搜索引擎-–-gt-“SSLSocketImpl内存问题“"><a href="#2-2-1搜索引擎-–-gt-“SSLSocketImpl内存问题“" class="headerlink" title="2.2.1搜索引擎 –&gt; “SSLSocketImpl内存问题“"></a>2.2.1搜索引擎 –&gt; “<a href="http://javakk.com/1035.html" target="_blank" rel="noopener">SSLSocketImpl内存问题</a>“</h6><img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/7.png" class="">
+<h6 id="2-2-2搜索引擎-–-gt-“java-lang-Finalizer内存问题“"><a href="#2-2-2搜索引擎-–-gt-“java-lang-Finalizer内存问题“" class="headerlink" title="2.2.2搜索引擎 –&gt; “java.lang.Finalizer内存问题“"></a>2.2.2搜索引擎 –&gt; “<a href="https://www.cnblogs.com/benwu/articles/5812903.html" target="_blank" rel="noopener">java.lang.Finalizer内存问题</a>“</h6><img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/8.png" class=""><br/>
+<br>
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/9.png" class=""><br/>
+<br>
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/10.png" class=""><br/>
+<br>
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/11.png" class=""><br/>
+<br>
+
+<h5 id="2-3-review代码"><a href="#2-3-review代码" class="headerlink" title="2.3.review代码"></a>2.3.review代码</h5><ol>
+<li>全局搜索”oapi.dingtalk.com”<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/12.png" class=""><br/>
+<br>
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/13.png" class=""><br/>
+<br>
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/14.png" class=""><br/>
+<br></li>
+<li>在阅读源码的过程中 看不到与 SSLSocketImpl 的关联 此时不能心灰意冷 <font color=red>记得 debug 看方法调用栈</font><img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/15.png" class=""><br/>
+<br>
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/16.png" class=""><br/>
+<br>
+<img src="/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/17.png" class=""><br/>
+<br>
+
+</li>
+</ol>
+<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h3><p>1.&ensp;解决方案：垃圾收集器<font color=red>从CMS升级到G1</font>(Finalizer只是将对象的回收变慢了 CMS只能等老年代的FGC G1根据容量配置进行回收)<br>2.&ensp;如果是mem%告警 堆内存引起的问题 重启服务前dump保留现场<br>3.&ensp;山穷水尽的时候 实践出真理 模拟调试dubug 肉眼看不见的代码 栈帧调用链会有痕迹</p>
 
       
 
@@ -239,7 +281,7 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">juc</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
         		</li>
       		
 		</ul>
@@ -295,7 +337,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/05/22/1.ThreadLocal/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/12/17/10.java.lang.Finalizer%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -309,15 +351,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/09/10/8.String.intern()/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          String.intern()
-        
-      </div>
-    </a>
   
+    <a href="/2021/03/05/9.spi/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">spi</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -334,6 +372,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-问题现象"><span class="toc-number">1.</span> <span class="toc-text">1.问题现象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-排查步骤"><span class="toc-number">2.</span> <span class="toc-text">2.排查步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-heap-dump"><span class="toc-number">2.0.1.</span> <span class="toc-text">2.1.heap dump</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-查阅资料"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.2.查阅资料</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1搜索引擎-–-gt-“SSLSocketImpl内存问题“"><span class="toc-number">2.0.2.1.</span> <span class="toc-text">2.2.1搜索引擎 –&gt; “SSLSocketImpl内存问题“</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-2搜索引擎-–-gt-“java-lang-Finalizer内存问题“"><span class="toc-number">2.0.2.2.</span> <span class="toc-text">2.2.2搜索引擎 –&gt; “java.lang.Finalizer内存问题“</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-review代码"><span class="toc-number">2.0.3.</span> <span class="toc-text">2.3.review代码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-总结"><span class="toc-number">3.</span> <span class="toc-text">3.总结</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

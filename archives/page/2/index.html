@@ -6,23 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>ThreadLocal | glj&#39;s bolg</title>
+  <title>Archives | glj&#39;s bolg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.首次接触threadlocal是在数据库连接池，connection和线程进行绑定，一个为键一个为值存入map，实现每个线程都获取自己的数据库连接。2.spring的@transactional也是通过threadlocal来实现注解下所有方法是同一个connection，来实现事务一致性。org.springframework.transaction.support.TransactionS">
-<meta property="og:type" content="article">
-<meta property="og:title" content="ThreadLocal">
-<meta property="og:url" content="http://yoursite.com/2018/05/22/1.ThreadLocal/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="glj&#39;s bolg">
+<meta property="og:url" content="http://yoursite.com/archives/page/2/index.html">
 <meta property="og:site_name" content="glj&#39;s bolg">
-<meta property="og:description" content="1.首次接触threadlocal是在数据库连接池，connection和线程进行绑定，一个为键一个为值存入map，实现每个线程都获取自己的数据库连接。2.spring的@transactional也是通过threadlocal来实现注解下所有方法是同一个connection，来实现事务一致性。org.springframework.transaction.support.TransactionS">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://yoursite.com/2018/05/22/1.ThreadLocal/1.png">
-<meta property="article:published_time" content="2018-05-22T12:42:51.000Z">
-<meta property="article:modified_time" content="2020-06-02T08:11:20.000Z">
 <meta property="article:author" content="Gong Linjie">
-<meta property="article:tag" content="java">
-<meta property="article:tag" content="juc">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2018/05/22/1.ThreadLocal/1.png">
   
     <link rel="alternative" href="/atom.xml" title="glj&#39;s bolg" type="application/atom+xml">
   
@@ -160,76 +152,36 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-1.ThreadLocal" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      ThreadLocal
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/05/22/1.ThreadLocal/" class="archive-article-date">
+  	<time datetime="2018-05-22T12:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-22</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/05/22/1.ThreadLocal/">ThreadLocal</a>
     </h1>
   
 
-        
-        <a href="/2018/05/22/1.ThreadLocal/" class="archive-article-date">
-  	<time datetime="2018-05-22T12:42:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1.首次接触threadlocal是在数据库连接池，connection和线程进行绑定，一个为键一个为值存入map，实现每个线程都获取自己的数据库连接。<br>2.spring的@transactional也是通过threadlocal来实现注解下所有方法是同一个connection，来实现事务一致性。<code>org.springframework.transaction.support.TransactionSynchronizationManager</code>打开就能看到threadlocal使用。<br>本篇基于jdk1.8，记录一下threadlocaln内部<font color=red>为什么使用弱引用</font>和<font color=red>为什么存在内存泄漏</font></p>
-<a id="more"></a>
-<h5 id="1-ThreadLocal为什么使用弱引用"><a href="#1-ThreadLocal为什么使用弱引用" class="headerlink" title="1.ThreadLocal为什么使用弱引用"></a>1.ThreadLocal为什么使用弱引用</h5><ul>
-<li>SoftReference(软引用)：空间不够的时候，就会被回收，可以做缓存</li>
-<li>WeakReference(弱引用)：垃圾回收的时候会直接回收</li>
-<li>PhantomReference(虚引用)：管理直接内存，nio使用</li>
-</ul>
-<p>Thread指向ThreadLocal，ThreadLocalMap以ThreadLocal为键，弱引用指向ThreadLocal。当ThreadLocal为null时，由于只存在弱引用指向ThreadLocal，所以ThreadLocal对象会被直接回收。如果map以强引用指向ThreadLocal，即使它为null，还是有map这个强引用指向它，就会存在内存泄漏。</p>
-<img src="/2018/05/22/1.ThreadLocal/1.png" class="">
-<h5 id="2-ThreadLocal为什么存在内存泄漏"><a href="#2-ThreadLocal为什么存在内存泄漏" class="headerlink" title="2.ThreadLocal为什么存在内存泄漏"></a>2.ThreadLocal为什么存在内存泄漏</h5><p>某个持续运行的线程，当ThreadLocal为null时，value指向的内存就会永远无法访问，并且一直存活导致内存泄漏(例如图中10M空间)，所以ThreadLocal存放的对象，养成习惯不使用的时候立即remove</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>有收获再赏哦<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/4.jpg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/5.jpg">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -245,120 +197,23 @@
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/05/22/1.ThreadLocal/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2018/09/10/8.String.intern()/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          String.intern()
-        
-      </div>
-    </a>
   
   
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
+    
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/archives/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span>
+    </nav>
   
-
-  
-
-
-
-  
-
-
-
-
-  
-
-
-
 
 
           </div>
@@ -387,8 +242,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
